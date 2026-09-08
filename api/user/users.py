@@ -2,9 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, status
 
-from api.auth.token import get_current_user
 from db.sqlite import session
 from models.users import UserBase
+from securities.token import get_current_user
 from services.users import create_user, delete_user, read_user, read_users, update_user
 
 router_users = APIRouter()

@@ -11,11 +11,11 @@ from db.sqlite import session
 from models.users import UserBase
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-SECRET_KEY = "A862BE8D5D908D54A61823A59802D5AC8C9759668800D0BF3BE9201FA8DA0C63"  # Replace with a secure secret key
+SECRET_KEY = "A862BE8D5D908D54A61823A59802D5AC8C9759668800D0BF3BE9201FA8DA0C63"
 ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
 
 
 def create_access_token(username: str, user_id: int, expires_delta: timedelta):
