@@ -4,7 +4,6 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
 
 from db.sqlite import session

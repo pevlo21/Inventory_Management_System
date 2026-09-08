@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
 
 from db.sqlite import session
-from models.users import UserBase, SigninModel
+from models.users import SigninModel, UserBase
 from securities.token import bcrypt_context, create_access_token
 
 router_signin = APIRouter()
@@ -51,7 +51,7 @@ def signin_user(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect password",
             )
-    except Exception:  # noqa: BLE001
+    except Exception:
         db.rollback()
         raise
 

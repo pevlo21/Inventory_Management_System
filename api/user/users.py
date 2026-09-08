@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from db.sqlite import session
 from models.users import UserBase
+from securities.privilage import require_role
 from securities.token import get_current_user
 from services.users import create_user, delete_user, read_user, read_users, update_user
 
@@ -12,14 +13,15 @@ router_users = APIRouter()
 @router_users.post("/users", response_model=UserBase, status_code=status.HTTP_201_CREATED)
 def create_user_endpoint(
     users: UserBase,
-    db: Annotated[session, Depends(session)]
+    db: session,
+    _: Annotated[dict, Depends(require_role("Admin"))],
 ):
     return create_user(users, db)
 
 @router_users.get("/")
 def read_all_users(
     db: session,
-    _: Annotated[dict, Depends(get_current_user)],
+    _: Annotated[dict, Depends(require_role("Admin", "HR"))],
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 100,
 ):
@@ -29,7 +31,7 @@ def read_all_users(
 def read_user_endpoint(
     user_id: int,
     db: session,
-    _: Annotated[dict, Depends(get_current_user)],
+    _: Annotated[dict, Depends(require_role("Admin", "HR"))],
 ):
     return read_user(user_id, db)
 
@@ -38,7 +40,7 @@ def update_user_endpoint(
     user_id: int,
     user: UserBase,
     db: session,
-    _: Annotated[dict, Depends(get_current_user)],
+    _: Annotated[dict, Depends(require_role("Admin", "HR"))],
 ):
     return update_user(user_id, user, db)
 
@@ -46,6 +48,6 @@ def update_user_endpoint(
 def delete_user_endpoint(
     user_id: int,
     db: session,
-    _: Annotated[dict, Depends(get_current_user)],
+    _: Annotated[dict, Depends(require_role("Admin"))],
 ):
     return delete_user(user_id, db)
