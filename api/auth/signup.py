@@ -6,7 +6,7 @@ from datetime import timedelta
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 
-from db.sqlite import session
+import db.sqlite
 from models.users import UserBase
 from securities.token import bcrypt_context, create_access_token
 from services.users import create_user
@@ -16,14 +16,13 @@ router_signup = APIRouter()
 @router_signup.post("/signup", response_model=UserBase, status_code=status.HTTP_201_CREATED)
 def signup_user(
     user: UserBase,
-    db: session
+    db: db.sqlite.session
 ):
     # Check if the username or email already exists
     existing_user = db.exec(
         select(UserBase).where(
             (UserBase.username == user.username) |
-            (UserBase.email == user
-             .email)
+            (UserBase.email == user.email)
         )
     ).first()
 

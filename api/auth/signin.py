@@ -11,23 +11,60 @@ from securities.token import bcrypt_context, create_access_token
 
 router_signin = APIRouter()
 
+# @router_signin.post("/auth/token")
+# def login_for_access_token(
+#     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+#     db: session
+# ):
+#     user = db.exec(select(UserBase).where(UserBase.username == form_data.username)).first()
+#     if not user or not bcrypt_context.verify(form_data.password, user.hashed_password):
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="Incorrect username or password",
+#             headers={"WWW-Authenticate": "Bearer"},
+#         )
+#     access_token_expires = timedelta(minutes=30)
+#     access_token = create_access_token(
+#         username=user.username, user_id=user.id, expires_delta=access_token_expires
+#     )
+#     return {"access_token": access_token, "token_type": "bearer"}
+
 @router_signin.post("/auth/token")
 def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    signin_data: SigninModel,
     db: session
 ):
-    user = db.exec(select(UserBase).where(UserBase.username == form_data.username)).first()
-    if not user or not bcrypt_context.verify(form_data.password, user.hashed_password):
+    user = db.exec(
+        select(UserBase).where(
+            UserBase.email == signin_data.email
+        )
+    ).first()
+
+    if not user or not bcrypt_context.verify(
+        signin_data.password,
+        user.hashed_password
+    ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=30)
+
+    if signin_data.remember_me:
+        access_token_expires = timedelta(days=30)
+    else:
+        access_token_expires = timedelta(minutes=30)
+
     access_token = create_access_token(
-        username=user.username, user_id=user.id, expires_delta=access_token_expires
+        username=user.username,
+        user_id=user.id,
+        expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
+    }
 
 @router_signin.post("/signin", response_model=UserBase, status_code=status.HTTP_200_OK)
 def signin_user(

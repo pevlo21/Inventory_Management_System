@@ -1,13 +1,18 @@
 from fastapi import APIRouter
 
+from api.admin.users import router_users
 from api.auth.signin import router_signin
 from api.auth.signup import router_signup
-from api.user.users import router_users
 from securities.token import router as authorization_router
 
-v1_router = APIRouter(prefix="/api", tags=["api"])
 
-v1_router.include_router(authorization_router)
-#v1_router.include_router(router_users)
-v1_router.include_router(router_signin)
-v1_router.include_router(router_signup)
+class V1Router(APIRouter):  #custom Router class to include all routers of the API
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.include_router(authorization_router)
+        self.include_router(router_signin)
+        self.include_router(router_signup)
+        self.include_router(router_users)
+
+
+v1_router = V1Router(prefix="/api", tags=["api"])

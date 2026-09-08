@@ -5,6 +5,7 @@ from sqlmodel import select
 
 from db.sqlite import session
 from models.users import UserBase
+from securities.token import bcrypt_context
 
 
 def create_user(users: UserBase, db: session):
@@ -16,6 +17,8 @@ def create_user(users: UserBase, db: session):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Username already exists",
             )
+
+        users.hashed_password = bcrypt_context.hash(users.hashed_password)  # Hash the password
 
         # Create a new user
         db.add(users)
