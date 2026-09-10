@@ -1,8 +1,9 @@
 from datetime import timedelta
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+# from typing import Annotated
+from fastapi import APIRouter, HTTPException, status
+
+# from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
 
 from db.sqlite import session
@@ -72,12 +73,12 @@ def signin_user(
     db: session,
 ):
     try:
-        # Check if the username exists
-        user_check = db.exec(select(UserBase).where(UserBase.username == users.username)).first()
+        # Check if the email exists
+        user_check = db.exec(select(UserBase).where(UserBase.email == users.email)).first()
         if not user_check:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Username not found",
+                detail="Email not found",
             )
 
         if not bcrypt_context.verify(
