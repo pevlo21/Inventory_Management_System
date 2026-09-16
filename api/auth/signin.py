@@ -7,7 +7,8 @@ from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 
 from db.sqlite import session
-from models.users import SigninModel, UserBase
+from models.users import UserBase
+from schema.signin import SigninModel
 from securities.token import bcrypt_context, create_access_token
 
 router_signin = APIRouter()

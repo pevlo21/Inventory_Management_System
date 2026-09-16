@@ -7,7 +7,8 @@ from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select
 
 from db.sqlite import session
-from models.users import SignupModel, UserBase
+from models.users import UserBase
+from schema.signup import SignupModel
 from securities.token import bcrypt_context, create_access_token
 from services.users import create_user
 
