@@ -18,8 +18,6 @@ def create_user(users: UserBase, db: session):
                 detail="Username already exists",
             )
 
-        users.hashed_password = bcrypt_context.hash(users.hashed_password)  # Hash the password
-
         # Create a new user
         db.add(users)
         db.commit()
@@ -57,7 +55,7 @@ def delete_user(user_id: int, db: session):
 
 def update_user(
     user_id: int,
-    user: UserBase,
+    user: UpdateUser,
     db: session
 ) -> UserBase:
     existing_user = db.get(UserBase, user_id)

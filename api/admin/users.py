@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from db.sqlite import session
 from models.users import UserBase
+from schema.updateuser import UpdateUser
 from securities.privilage import require_role
 from services.users import create_user, delete_user, read_user, read_users, update_user
 
@@ -36,14 +37,14 @@ def read_user_endpoint(
 ):
     return read_user(user_id, db)
 
-# @router_users.put("/{user_id}", response_model=UserBase)
-# def update_user_endpoint(
-#     user_id: int,
-#     user: UserBase,
-#     db: session,
-#     _: Annotated[dict, Depends(require_role("Admin"))],
-# ):
-#     return update_user(user_id, user, db)
+@router_users.put("/{user_id}", response_model=UserBase)
+def update_user_endpoint(
+    user_id: int,
+    user: UpdateUser,
+    db: session,
+    _: Annotated[dict, Depends(require_role("Admin"))],
+):
+    return update_user(user_id, user, db)
 
 @router_users.delete("/{user_id}")
 def delete_user_endpoint(

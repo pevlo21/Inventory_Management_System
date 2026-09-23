@@ -15,7 +15,7 @@ SECRET_KEY = "A862BE8D5D908D54A61823A59802D5AC8C9759668800D0BF3BE9201FA8DA0C63"
 ALGORITHM = "HS256"
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 
 def create_access_token(username: str, user_id: int, expires_delta: timedelta):

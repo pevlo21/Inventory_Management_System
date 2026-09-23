@@ -1,9 +1,8 @@
 from datetime import timedelta
 
 # from typing import Annotated
-from fastapi import APIRouter, HTTPException, status
-
-# from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
 
 from db.sqlite import session
@@ -31,19 +30,22 @@ router_signin = APIRouter()
 #     )
 #     return {"access_token": access_token, "token_type": "bearer"}
 
+
+
 @router_signin.post("/auth/token")
 def login_for_access_token(
-    signin_data: SigninModel,
-    db: session
+    db: session,
+    form_data: OAuth2PasswordRequestForm = Depends(),
 ):
     user = db.exec(
         select(UserBase).where(
-            UserBase.email == signin_data.email
+            UserBase.username == form_data.username
         )
     ).first()
+    
 
     if not user or not bcrypt_context.verify(
-        signin_data.password,
+        form_data.password,
         user.hashed_password
     ):
         raise HTTPException(
@@ -52,10 +54,7 @@ def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if signin_data.remember_me:
-        access_token_expires = timedelta(days=30)
-    else:
-        access_token_expires = timedelta(minutes=30)
+    access_token_expires = timedelta(minutes=30)
 
     access_token = create_access_token(
         username=user.username,
