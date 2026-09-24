@@ -5,6 +5,7 @@ from sqlmodel import select
 
 from db.sqlite import session
 from models.users import UserBase
+from schema.updateuser import UpdateUser
 from securities.token import bcrypt_context
 
 
