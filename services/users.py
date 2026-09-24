@@ -6,7 +6,6 @@ from sqlmodel import select
 from db.sqlite import session
 from models.users import UserBase
 from schema.updateuser import UpdateUser
-from securities.token import bcrypt_context
 
 
 def create_user(users: UserBase, db: session):
@@ -16,7 +15,7 @@ def create_user(users: UserBase, db: session):
         if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Username already exists",
+                detail="Username already exists"
             )
 
         # Create a new user

@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 # from typing import Annotated
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
 
