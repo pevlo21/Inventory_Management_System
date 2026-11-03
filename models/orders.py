@@ -11,8 +11,14 @@ class statusE(Enum):
     delivered = "delivered"
     cancelled = "cancelled"
 
+class OrderItem(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    order_id: int = Field(foreign_key="OrderBase.id")
+    product_id: int = Field(foreign_key="ProductBase.id")
+    quantity: int = Field(index=True)
+
 class OrderBase(SQLModel, table=True):
-    order_id: int = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
     date: date = Field(default_factory=lambda: datetime.now(tz=timezone.utc).date())
     user_id: int = Field(foreign_key="UserBase.id")
     sales_channel: str = Field(index=True)
