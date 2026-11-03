@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
@@ -12,3 +14,4 @@ class UserBase(SQLModel, table=True):
     phone_number: str = Field(index=True, unique=True)
     email: EmailStr = Field(index=True, unique=False)
     hashed_password: str = Field(sa_column_kwargs={"nullable": False})  # Store hashed password
+    created_at: datetime = Field(default_factory=datetime.utcnow)
