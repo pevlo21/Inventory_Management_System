@@ -13,13 +13,8 @@ class CategoryBase(SQLModel, tabel=True):
     category: str = Field(index=True, unique=True)
     description: str = Field(index=True, unique=False)
 
-class MerchantBase(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    merchant: str = Field(index=True, unique=True)
-    region: str = Field(index=True, unique=False)
-
 class ProductBase(SQLModel, table=True):
-    product_id: int = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
     product: str = Field(index=True)
     category_id: int = Field(foreign_key="CategoryBase.id", index=True)
     merchant_id: int = Field(foreign_key="MerchantBase.id", index=True)
