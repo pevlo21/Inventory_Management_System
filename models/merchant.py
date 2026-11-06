@@ -10,3 +10,5 @@ class MerchantBase(SQLModel, table=True):
     address: str = Field(index=True, unique=False)
     status: str = Field(index=True, unique=False)
     region: str = Field(index=True, unique=False)
+    created_by: str = Field(index=True, unique=False)
+    updated_by: str = Field(index=True, unique=False)
