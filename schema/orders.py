@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class OrderModel(BaseModel):
-    product_name: str
-    qty : int
-    
+    Product_name: str
+    Qty : int
+    Address: str
+    Contact_number: int
