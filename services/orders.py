@@ -5,8 +5,8 @@ from sqlmodel import select
 
 from db.sqlite import session
 from models.orders import OrderBase, OrderItem
-from models.users import UserBase
 from models.product import ProductBase
+from models.users import UserBase
 
 
 def place_order(order: OrderBase, db: session):
@@ -38,7 +38,7 @@ def place_order(order: OrderBase, db: session):
     
         #place order
         db.add(order)
-        db.commit(order)
+        db.commit()
         db.refresh(order)
 
         return order
@@ -71,3 +71,4 @@ def cancel_order(order_id: int, db: session):
     db.delete(order)
     db.commit()
     return order
+
