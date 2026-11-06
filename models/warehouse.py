@@ -2,7 +2,7 @@
 from sqlmodel import Field, SQLModel
 
 
-class WarehouseBase(SQLModel, table=True):
+class Warehouse(SQLModel, table=True):
     id:int = Field(default=None, primary_key=True)
     name:str = Field(index=True, unique=True)
     code:str = Field(index=True, unique=True)
