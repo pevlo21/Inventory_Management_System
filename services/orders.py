@@ -9,7 +9,7 @@ from models.product import ProductBase
 from models.users import UserBase
 
 
-def place_order(order: OrderBase, db: session):
+def create_order(order: OrderBase, db: session):
     #check if the user exists
     existing_user = db.get(UserBase, order.user_id)
     if not existing_user:
@@ -51,20 +51,20 @@ def place_order(order: OrderBase, db: session):
         )
 
 
-def read_orders(
+def get_orders(
         db:session,
         offset: int=0,
         limit: Annotated[int,Query(le=100)]=100) -> list[OrderBase]:
     orders = db.exec(select(OrderBase).offset(offset).limit(limit)).all()
     return orders
 
-def read_order(order_id: int, db: session):
+def get_order(order_id: int, db: session):
     order = db.get(OrderBase, order_id)
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="order not found")
     return order
 
-def cancel_order(order_id: int, db: session):
+def delete_order(order_id: int, db: session):
     order =db.get(OrderBase, order_id)
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="order not found")
