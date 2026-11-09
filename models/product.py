@@ -8,16 +8,16 @@ class statusE(Enum):
     outofstock = "outofstock"
 
 
-class CategoryBase(SQLModel, tabel=True):
+class categorybase(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     category: str = Field(index=True, unique=True)
     description: str = Field(index=True, unique=False)
 
-class ProductBase(SQLModel, table=True):
+class productbase(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     product: str = Field(index=True)
-    category_id: int = Field(foreign_key="CategoryBase.id", index=True)
-    merchant_id: int = Field(foreign_key="MerchantBase.id", index=True)
+    category_id: int = Field(foreign_key="categorybase.id", index=True)
+    merchant_id: int = Field(foreign_key="merchantbase.id", index=True)
     availability: str = Field(index=True)
     instructions: str = Field(index=True)
     price: float = Field(index=True)
