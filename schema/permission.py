@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 
-class PermissionModel(BaseModel):
+class PRModel(BaseModel):
     name: str
     description: str

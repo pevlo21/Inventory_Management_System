@@ -1,11 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlmodel import select
 
 from db.sqlite import session
 from models.orders import OrderBase
-from models.users import UserBase
 from schema.orders import OrderModel
 from securities.privilage import require_role
 from services.orders import (
@@ -18,15 +17,8 @@ from services.orders import (
 router_orders = APIRouter()
 
 @router_orders.post("/orders", response_model=OrderBase, status_code=status.HTTP_201_CREATED)
-def place_order(order: OrderModel, db: session):
+def place_order(order: OrderModel, db: session, _:Annotated[dict, Depends(require_role("user"))]):
 
-    #user checking
-    user = db.exec(select(UserBase).where(UserBase.id == order.customer_id)).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
     
     #order placing
     new_order = OrderBase(
