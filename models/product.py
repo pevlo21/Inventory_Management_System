@@ -9,15 +9,15 @@ class statusE(Enum):
 
 
 
-class productbase(SQLModel, table=True):
+class ProductBase(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     product: str = Field(index=True)
-    category_id: int = Field(foreign_key="categorybase.id", index=True)
-    merchant_id: int = Field(foreign_key="merchantbase.id", index=True)
+    category_id: int = Field(foreign_key="categories.id", index=True)
+    merchant_id: int = Field(foreign_key="merchants.id", index=True)
     availability: str = Field(index=True)
     instructions: str = Field(index=True)
     price: float = Field(index=True)
     instock: int = Field(index=True)
     status: statusE = Field(index=True)
 
-    ___tablename__ = "products"
+    __tablename__ = "products"

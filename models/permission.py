@@ -8,4 +8,4 @@ class Permission(SQLModel, table=True):
     created_by: str = Field(index=True, unique=False)
     updated_by: str = Field(index=True, unique=False)
 
-    ___tablename__ = "permissions"
+    __tablename__ = "permissions"

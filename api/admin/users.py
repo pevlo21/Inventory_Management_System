@@ -6,6 +6,8 @@ from db.sqlite import session
 from models.users import UserBase
 from schema.updateuser import UpdateUser
 from securities.privilage import require_role
+
+# from securities.token import bcrypt_context
 from services.users import create_user, delete_user, read_user, read_users, update_user
 
 #role=["Super_Admin","Admin"]
@@ -16,8 +18,9 @@ router_users = APIRouter()
 # def create_user_endpoint(
 #     users: UserBase,
 #     db: session,
-#     _: Annotated[dict, Depends(require_role("Admin"))],
 # ):
+
+#     users.hashed_password = bcrypt_context.hash(users.hashed_password)
 #     return create_user(users, db)
 
 @router_users.get("/")
