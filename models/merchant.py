@@ -12,3 +12,5 @@ class MerchantBase(SQLModel, table=True):
     region: str = Field(index=True, unique=False)
     created_by: str = Field(index=True, unique=False)
     updated_by: str = Field(index=True, unique=False)
+
+    __tablename__ = "merchants"
