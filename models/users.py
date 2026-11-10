@@ -15,3 +15,5 @@ class UserBase(SQLModel, table=True):
     email: EmailStr = Field(index=True, unique=False)
     hashed_password: str = Field(sa_column_kwargs={"nullable": False})  # Store hashed password
     created_at: datetime = Field(default_factory=datetime.utcnow)
+
+    ___tablename__ = "users"

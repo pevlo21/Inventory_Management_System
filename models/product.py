@@ -8,10 +8,6 @@ class statusE(Enum):
     outofstock = "outofstock"
 
 
-class categorybase(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    category: str = Field(index=True, unique=True)
-    description: str = Field(index=True, unique=False)
 
 class productbase(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
@@ -23,3 +19,5 @@ class productbase(SQLModel, table=True):
     price: float = Field(index=True)
     instock: int = Field(index=True)
     status: statusE = Field(index=True)
+
+    ___tablename__ = "products"

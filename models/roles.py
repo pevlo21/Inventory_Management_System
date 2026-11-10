@@ -7,3 +7,5 @@ class Role(SQLModel, table=True):
     description: str = Field(index=True, unique=False)
     created_by: str = Field(index=True, unique=False)
     updated_by: str = Field(index=True, unique=False)
+
+    ___tablename__ = "roles"
