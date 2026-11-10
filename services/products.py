@@ -7,7 +7,7 @@ from db.sqlite import session
 from models.product import ProductBase
 
 
-def create_user(product: ProductBase, db: session):
+def create_product(product: ProductBase, db: session):
     try:
         #check if the product already exists
         existing_prod = db.exec(select(ProductBase).where(ProductBase.product_id == product.product_id)).first()
