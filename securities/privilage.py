@@ -7,13 +7,27 @@ from models.users import UserBase
 from securities.token import get_current_user
 
 
-def require_role(required_role: str):
+# def require_role(required_role: str):
+#     async def role_checker(
+#             current_user: Annotated[UserBase, Depends(get_current_user)]):
+#         if current_user.user_type != required_role:
+#             raise HTTPException(
+#                 status_code=status.HTTP_403_FORBIDDEN,
+#                 detail=f"{required_role} privileges required",
+#             )
+#         return current_user
+#     return role_checker
+
+def require_role(required_role: list[str]):
     async def role_checker(
             current_user: Annotated[UserBase, Depends(get_current_user)]):
-        if current_user.user_type != required_role:
+
+        if current_user.user_type not in required_role:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"{required_role} privileges required",
+                detail=f"{', '.join(required_role)} privileges required",
             )
+
         return current_user
+
     return role_checker

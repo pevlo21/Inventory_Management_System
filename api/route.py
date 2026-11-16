@@ -5,6 +5,7 @@ from api.admin.users import router_users
 from api.auth.signin import router_signin
 from api.auth.signup import router_signup
 from api.purchase.category import router_category
+from api.purchase.product import router_product
 from api.purchase.merchants import router_merchants
 from api.sales.orders import router_orders
 from securities.token import router as router_authentication
@@ -20,6 +21,7 @@ class V1Router(APIRouter):  #custom Router class to include all routers of the A
         self.include_router(router_orders)
         self.include_router(router_category)
         self.include_router(router_merchants)
+        self.include_router(router_product)
         self.include_router(router_permission)
 
 

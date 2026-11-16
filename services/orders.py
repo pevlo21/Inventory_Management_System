@@ -7,56 +7,32 @@ from db.sqlite import session
 from models.orders import OrderBase, OrderItem
 from models.product import ProductBase
 from models.users import UserBase
+from schema.orders import OrderModel
 
 
-def create_order(order: OrderBase, db: session):
-    #check if the user exists
-    existing_user = db.get(UserBase, order.user_id)
-    if not existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="user not found"
-        )
-    try:
-        #check if the product exists
-        existing_prod = db.get(ProductBase, order.product_id)
+def create_order(order: OrderModel, current_user: UserBase, db: session):
+
+    for item in order.Product_name:
+
+        existing_prod = db.exec(
+            select(ProductBase).where(
+                ProductBase.product == item.product_name
+            )
+        ).first()
+
         if not existing_prod:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="product not found"
+                detail=f"Product '{item.product_name}' not found"
             )
-        #check if the product is in stock
-        if existing_prod.instock < order.Quantity:
+
+        # Check requested quantity
+        if existing_prod.instock < item.quantity:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail='insufficient Stock'
-            )       
+                detail=f"Insufficient stock for {item.product_name}"
+            )
 
-        #update stock
-        existing_prod.instock -= order.Quantity 
-
-    
-        #place order
-        db.add(order)
-        db.commit()
-        db.refresh(order)
-
-        return order
-
-    except Exception as e:  # noqa: BLE001
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=(e)
-        )
-
-
-def get_orders(
-        db:session,
-        offset: int=0,
-        limit: Annotated[int,Query(le=100)]=100) -> list[OrderBase]:
-    orders = db.exec(select(OrderBase).offset(offset).limit(limit)).all()
-    return orders
 
 def get_order(order_id: int, db: session):
     order = db.get(OrderBase, order_id)

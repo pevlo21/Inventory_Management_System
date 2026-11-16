@@ -3,10 +3,16 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query, status
 
 from db.sqlite import session
-from securities.privilage import require_role
 from models.product import ProductBase
-from schema.updateuser import UpdateProduct
-from services.products import create_product, read_product, read_products, update_product, delete_product
+from schema.update import UpdateProduct
+from securities.privilage import require_role
+from services.products import (
+    create_product,
+    delete_product,
+    read_product,
+    read_products,
+    update_product,
+)
 
 router_product = APIRouter()
 
@@ -19,13 +25,13 @@ def add_products(
     return create_product(prod,db)
     
 
-@router_product.get("/")
+@router_product.get("/products")
 def read_all_products(
     db: session,
     offset: int =0,
     limit: Annotated[int, Query(le=100)] =100
 ):
-    return read_product(db, offset, limit)
+    return read_products(db, offset, limit)
 
 
 @router_product.get("/{product_id}")
@@ -44,3 +50,10 @@ def modify_product(
 ):
     return update_product(product_id,prod,db)
 
+@router_product.delete("/{user_id})")
+def remove_product(
+    prod_id: int,
+    db: session,
+    _: Annotated[dict, Depends(require_role("Admin"))]
+):
+    return delete_product(prod_id,db)

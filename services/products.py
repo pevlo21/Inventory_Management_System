@@ -10,7 +10,7 @@ from models.product import ProductBase
 def create_product(product: ProductBase, db: session):
     try:
         #check if the product already exists
-        existing_prod = db.exec(select(ProductBase).where(ProductBase.product_id == product.product_id)).first()
+        existing_prod = db.exec(select(ProductBase).where(ProductBase.id == product.id)).first()
         if existing_prod:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -18,7 +18,7 @@ def create_product(product: ProductBase, db: session):
             )
         #create new product
         db.add(product)
-        db.commit(product)
+        db.commit()
         db.refresh(product)
         return product
 

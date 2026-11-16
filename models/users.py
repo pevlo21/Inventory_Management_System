@@ -17,3 +17,12 @@ class UserBase(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     __tablename__ = "users"
+
+
+class UserRoles(SQLModel, table=True):
+    id:int =Field(default=None, primary_key=True)
+    user_id : int = Field(default=None, foreign_key="users.id")
+    role_id : int = Field(default=None, foreign_key="roles.id")
+    created_at : datetime=Field(default_factory=datetime.utcnow)
+
+    __tablename__= "user_roles"

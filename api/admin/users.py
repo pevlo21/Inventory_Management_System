@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from db.sqlite import session
 from models.users import UserBase
-from schema.updateuser import UpdateUser
+from schema.update import UpdateUser
 from securities.privilage import require_role
 
 # from securities.token import bcrypt_context
@@ -23,7 +23,7 @@ router_users = APIRouter()
 #     users.hashed_password = bcrypt_context.hash(users.hashed_password)
 #     return create_user(users, db)
 
-@router_users.get("/")
+@router_users.get("/users")
 def read_all_users(
     db: session,
     _: Annotated[dict, Depends(require_role("Admin"))],
